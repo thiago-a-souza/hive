@@ -40,11 +40,16 @@ Hive provides primitive data types available in most relational databases, but a
 
 **Complex Data Types:** 
 
-- **Array:** stores values of a given type and can be accessed using their index. Example: *ARRAY<STRING>*
+- **Array:** stores values of a given type and can be accessed using their index. 
+Example: ARRAY< DOUBLE >
+
 
 - **Maps:** stores key-value pairs and can be accessed using their keys. Example: *MAP<STRING, INT>*
 
 - **Structs:** similar to structs from C/C++ and can be accessed using a dot notation. Example: *STRUCT<city:STRING, state:STRING>*
+
+
+
 
     
 # References
