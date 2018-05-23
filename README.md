@@ -110,6 +110,22 @@ hive> USE hr;
 
 When a user creates a table, Hive creates a subdirectory under the current database, under which will store all files associated with the table. If the DDL does not provide an alternative location, the table can be referred as internal, otherwise it's described as external. Hive manages the life cycle of internal tables, meaning that when the table is dropped, the corresponding data is also removed. On the other hand, dropping external tables don't remove the corresponding data, making them more appropriate to prevent accidents. 
 
+
+```
+CREATE TABLE employees (
+ id             INT,
+ name           STRING,
+ address        STRUCT<street:STRING, city:STRING, state:STRING>,
+ phones         ARRAY<STRING>,
+ languages_level MAP<STRING, STRING>
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY '|'
+COLLECTION ITEMS TERMINATED BY ','
+MAP KEYS TERMINATED BY ':'
+LINES TERMINATED BY '\n';
+```
+
 ### Partitions
 
 ### Buckets
