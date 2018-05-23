@@ -22,6 +22,16 @@ Hive's architecture, illustrated in Figure 1, comprises four major components:
 Figure 1: Apache Hive architecture <a href="https://github.com/thiago-a-souza/tmp/blob/master/README.md#references">(1)</a> </p> 
 </p>
 
+## Data model
+
+Hive organizes the data into four elements:
+
+- **Database:** represents a namespace to group and uniquely identify objects (e.g. tables, views, etc). Every database creates under the warehouse directory - specified in the configuration file *$HIVE_HOME/conf/hive-site.xml*, which default warehouse directory is */user/hive/warehouse* in HDFS.
+- **Table:** similar to database tables with columns, rows, etc. Every table creates a  subdirectory under the corresponding database directory.
+- **Partition:** tables can be split into partitions for faster scans. Every partition creates a subdirectory under the corresponding table directory in HDFS.
+- **Buckets:** tables can be further optimized with buckets based on the hash function of a given column.
+
+
 ## Data types
 
 Hive provides primitive data types available in most relational databases, but also supports complex data types, which are not supported by traditional databases because they would break the normal form.  For a complete and up-to-date reference check out the language manual [(2)](#references).
