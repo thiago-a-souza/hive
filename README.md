@@ -2,7 +2,7 @@
 Thiago Alexandre Domingues de Souza
 
 # Apache Hive
-MapReduce programs allowed processing very large datasets that were not feasible before. However, developing solutions using this programming model can be challenging, taking hours to write algorithms for typical problems. As a result, Facebook introduced Hive, a data warehouse platform that can process petabytes worth of data using a syntax based on SQL called HQL (Hive Query Language). Behind the scenes, Hive converts queries into MapReduce jobs, but it can be configured to use faster execution engines such as Apache Spark or Apache Tez. By leveraging standard query languages, Hive targeted a large  community that was already familiar with traditional database concepts and eliminated the need for Java programs. Nowadays, Hive is an open-source project maintained by Apache software foundation.
+MapReduce programs allowed processing very large datasets that were not possible before. However, developing solutions using this programming model can be challenging, taking hours to write algorithms for typical problems. As a result, Facebook introduced Hive, a data warehouse platform that can process petabytes worth of data using a syntax based on SQL called HQL (Hive Query Language). Behind the scenes, Hive converts queries into MapReduce jobs, but it can be configured to use faster execution engines such as Apache Spark or Apache Tez. By leveraging standard query languages, Hive targeted a large  community that was already familiar with traditional database concepts and eliminated the need for Java programs. Nowadays, Hive is an open-source project maintained by Apache software foundation.
 
 It's important to highlight that Hive was not designed to be an on-line transaction processing system (OLTP), characterized by frequent low-latency transactions (e.g. insert, update, delete). In fact, it's not even a database, but a user-friendly interface to query data stored in HDFS files. Consequently, it's suitable for data warehouse tasks, where large datasets are maintained for analytical purposes like data mining, data analysis, building reports, etc.
 
@@ -60,8 +60,59 @@ Example: ARRAY< DOUBLE >
 
 Unlike traditional databases, which have total control of the data being loaded and enforce that the table definitions are followed at the write time (a.k.a. schema-on-write), Hive does not control the data stored. Users can store files in HDFS and then create the table that references it, regardless of the data format. This behavior, called schema-on-read, can cause null values when they are not in conformance with table defitions, for example, when a column is defined as numeric but a string is found.
 
+## Data Definition Language (DDL)
+Similarly to RDBMS DDLs, Hive DDLs allow creating,  altering or dropping the structure of objects (e.g. databases, tables, columns, views, etc).
+
+### Databases
+
+Hive provides a standard database called *default*. Every new database creates a directory under the path defined in the configuration file *$HIVE_HOME/conf/hive-site.xml*, the default HDFS location is */user/hive/warehouse*.
 
 
+Creating a new database in the standard directory:
+
+```
+hive> CREATE DATABASE hr;
+hive> dfs -ls /user/hive/warehouse;
+drwxrwxr-x   - root supergroup          0 2018-05-23 19:08 /user/hive/warehouse/hr.db
+```
+
+Creating a new database in a custom directory:
+
+```
+hive> CREATE DATABASE it
+    > LOCATION '/user/thiago/it.db';
+hive> dfs -ls /user/thiago;
+drwxr-xr-x   - root supergroup          0 2018-05-23 19:44 /user/thiago/it.db
+```
+
+Dropping a database also removes the corresponding directory:
+
+```
+hive> DROP DATABASE it;
+hive> dfs -ls /user/thiago;
+```
+
+Displaying all databases available:
+
+```
+hive> SHOW DATABASES;
+default
+hr
+```
+
+Switching to a specified database:
+
+```
+hive> USE hr;
+```
+
+### Tables
+
+### Partitions
+
+### Buckets
+
+### Views
     
 # References
 
