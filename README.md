@@ -24,6 +24,10 @@ Figure 1: Apache Hive architecture <a href="https://github.com/thiago-a-souza/tm
 
 ## Data types
 
+Hive provides primitive data types available in most relational databases, but also supports complex data types, which are not supported by traditional databases because they would break the normal form.  For a complete and up-to-date reference check out the language manual [(2)](#references).
+
+**Primitive Data Types:** 
+
 - **Numeric:** *double, float, bigint, int, smallint, tinyint*
 
 - **Date/time:** *date, timestamp, interval*
@@ -34,7 +38,15 @@ Figure 1: Apache Hive architecture <a href="https://github.com/thiago-a-souza/tm
 
 - **Binary:** *binary*
 
+**Complex Data Types:** 
 
+- **Array:** stores values of a given type and can be accessed using their index. Example: *ARRAY<STRING>*
+
+- **Maps:** stores key-value pairs and can be accessed using their keys. Example: *MAP<STRING, INT>*
+
+- **Structs:** similar to structs from C/C++ and can be accessed using a dot notation. Example: *STRUCT<city:STRING, state:STRING>*
+
+    
 # References
 
 (1) Capriolo, Edward et al. Programming Hive: Data warehouse and query language for Hadoop. O'Reilly Media, 2012.
