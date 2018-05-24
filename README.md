@@ -115,21 +115,65 @@ By default, when a table is created, Hive creates a new folder under the current
 
 To support processing structured files, Hive adopts control characters (^A for columns, ^B for arrays/structs and ^C for Map key-value pairs) as default delimiters rather than pipes or commas to prevent errors in case these characters are in the fields. But it can also be customized to define alternative delimiters.
 
+**a) Internal table with default settings**
+
+File *emp_std.txt* using standard delimiters:
 
 ```
-CREATE TABLE employees (
- id              INT,
- name            STRING,
- address         STRUCT<street:STRING, city:STRING, state:STRING>,
- phones          ARRAY<STRING>,
- languages_level MAP<STRING, STRING>
-)
-ROW FORMAT DELIMITED
-FIELDS TERMINATED BY '|'
-COLLECTION ITEMS TERMINATED BY ','
-MAP KEYS TERMINATED BY ':'
-LINES TERMINATED BY '\n';
+1^Ajohn^A50 Hagiwara Tea Garden Dr^BSan Francisco^BCA^A111-222-3333^B444-555-8888^Aenglish^Cfluent^Bspanish^Cbasic
+2^Apeter^A700 Exposition Park Dr^BLos Angeles^BCA^A222-111-3333^B777-555-4444^Aenglish^Cfluent^Bfrench^Cadvanced^Bspanish^Cintermediate
+3^Ahans^A79th St^BNew York^BNY^A789-012-3456^A999-000-1111^Agerman^Cfluent^Benglish^Cadvanced
 ```
+
+Creating an internal table using default settings, verifying the folder created and moving *emp_std.txt* to the table folder:
+
+```
+hive> CREATE TABLE hr.employees_std (
+      id              INT,
+      name            STRING,
+      address         STRUCT<street:STRING, city:STRING, state:STRING>,
+      phones          ARRAY<STRING>,
+      languages_level MAP<STRING, STRING>
+      );
+    
+hive> dfs -ls /user/hive/warehouse/hr.db;
+drwxrwxr-x   - root supergroup          0 2018-05-24 15:27 /user/hive/warehouse/hr.db/employees
+
+hive> dfs -put emp_std.txt /user/hive/warehouse/hr.db/employees_std;
+```
+
+**b) Internal table with customized settings**
+
+File *emp_cust.txt* using customized delimiters:
+
+```
+1|john|50 Hagiwara Tea Garden Dr,San Francisco,CA|111-222-3333,444-555-8888|english:fluent,spanish:basic
+2|peter|700 Exposition Park Dr,Los Angeles,CA|222-111-3333,777-555-4444|english:fluent,french:advanced,spanish:intermediate
+3|hans|79th St,New York,NY|789-012-3456|999-000-1111|german:fluent,english:advanced
+```
+
+Creating an alternative folder, copying the file to the new folder and creating a customized table:
+
+```
+hive> dfs -mkdir -p /user/thiago/employees_cust;
+hive> dfs -put emp_cust.txt /user/thiago/employees_cust;
+
+hive> CREATE TABLE hr.employees_cust (
+      id             INT,
+      name           STRING,
+      address        STRUCT<street:STRING, city:STRING, state:STRING>,
+      phones         ARRAY<STRING>,
+      languages_level MAP<STRING, STRING>
+     )
+     ROW FORMAT DELIMITED
+     FIELDS TERMINATED BY '|'
+     COLLECTION ITEMS TERMINATED BY ','
+     MAP KEYS TERMINATED BY ':'
+     LINES TERMINATED BY '\n'
+     LOCATION '/user/thiago/employees_cust';
+```
+
+
 
 ### Partitions
 
