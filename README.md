@@ -58,7 +58,7 @@ Example: ARRAY< DOUBLE >
 
 - **Structs:** similar to structs from C/C++ and can be accessed using a dot notation. Example: *STRUCT<city:STRING, state:STRING>*
 
-Unlike traditional databases, which have total control of the data being loaded and enforce that the table definitions are followed at the write time (a.k.a. schema-on-write), Hive does not control the data stored. Users can store files in HDFS and then create the table that references it, regardless of the data format. This behavior, called schema-on-read, can cause null values when they are not in conformance with table defitions, for example, when a column is defined as numeric but a string is found.
+Unlike traditional databases, which have total control of the data being loaded and enforce that the table definitions are followed at the write time (a.k.a. schema-on-write), Hive does not control the data stored. Users can store files in HDFS and then create the table that references it, regardless of the data format. This behavior, called schema-on-read, can cause null values when they are not in conformance with table definitions, for example, when a column is defined as numeric but a string is found.
 
 ## Data Definition Language (DDL)
 Similarly to RDBMS DDLs, Hive allows creating,  altering or dropping the structure of objects (e.g. databases, tables, columns, views, etc).
@@ -186,7 +186,7 @@ hive> CREATE TABLE hr.employees_cust (
 
 **c) External table**
 
-Creating a folder, moving the file and creating a external table:
+Creating a folder, moving the file and creating an external table:
 
 ```
 hive> dfs -mkdir -p /user/thiago/employees_external;
@@ -213,14 +213,14 @@ hive> dfs -ls -R /user/thiago/employees_external;
 
 ### Partitions
 
-In RDBMS world, partitions can segment tables based on a column for performance purposes. Hive follows that concept by creating subdirectories under the folder's table. That way each subdirectory stores files for the corresponding  partition. Hive uses a different syntax to declare partitions, the column being partitioned cannot be in the *CREATE TABLE* statement because it creates columns specified in the *PARTITION BY* clause.
+In RDBMS world, partitions can segment tables based on a column for performance purposes. Hive follows that concept by creating subdirectories under the table's folder. That way each subdirectory stores files for the corresponding  partition. Hive uses a different syntax to declare partitions, the column being partitioned cannot be in the *CREATE TABLE* statement because it creates columns specified in the *PARTITION BY* clause.
 
 Once the partition is declared in the table structure, the actual partition values should be added to the table. The *LOAD* statement can add them if the partition names and values are provided. Alternatively, the *ALTER TABLE* statement can also add partition values.
 
 
 **a) Creating partitions with LOAD**
 
-Notice that creating a partitioned table only creates the table folder. After running the *LOAD* statement we can see that a partition and a subdirectory *country=USA* was created.
+Notice that creating a partitioned table only creates the table's folder. After running the *LOAD* statement, we can see that a partition and a subdirectory *country=USA* was created.
 
 ```
 hive> CREATE TABLE hr.employees_partitioned (
