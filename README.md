@@ -142,6 +142,17 @@ drwxrwxr-x   - root supergroup          0 2018-05-24 15:27 /user/hive/warehouse/
 hive> dfs -put emp_std.txt /user/hive/warehouse/hr.db/employees_std;
 ```
 
+Dropping internal tables remove metadata from metastore as well as the table folder and all files:
+
+```
+hive> dfs -ls -R  /user/hive/warehouse/hr.db;
+drwxrwxr-x   - root supergroup          0 2018-05-24 17:56 /user/hive/warehouse/hr.db/employees_std
+-rw-r--r--   1 root supergroup        469 2018-05-24 17:56 /user/hive/warehouse/hr.db/employees_std/emp_std.txt
+hive> drop table hr.employees_std;
+hive> dfs -ls -R  /user/hive/warehouse/hr.db;
+hive> 
+```
+
 **b) Internal table with customized settings**
 
 File *emp_cust.txt* using customized delimiters:
@@ -173,6 +184,31 @@ hive> CREATE TABLE hr.employees_cust (
      LOCATION '/user/thiago/employees_cust';
 ```
 
+**c) External table**
+
+Creating a folder, moving the file and creating a external table:
+
+```
+hive> dfs -mkdir -p /user/thiago/employees_external;
+hive> dfs -put emp_ext.txt /user/thiago/employees_external;
+
+hive> CREATE EXTERNAL TABLE hr.employees_ext (
+      id              INT,
+      name            STRING,
+      address         STRUCT<street:STRING, city:STRING, state:STRING>,
+      phones          ARRAY<STRING>,
+      languages_level MAP<STRING, STRING>
+     )
+     LOCATION '/user/thiago/employees_external';
+```
+
+Dropping external tables won't remove folders or files:
+
+```
+hive> drop table hr.employees_ext;
+hive> dfs -ls -R /user/thiago/employees_external;
+-rw-r--r--   1 root supergroup        469 2018-05-24 18:08 /user/thiago/employees_external/emp_ext.txt
+```
 
 
 ### Partitions
