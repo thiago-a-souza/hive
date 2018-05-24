@@ -118,10 +118,10 @@ To support processing structured files, Hive adopts control characters (^A for c
 
 ```
 CREATE TABLE employees (
- id             INT,
- name           STRING,
- address        STRUCT<street:STRING, city:STRING, state:STRING>,
- phones         ARRAY<STRING>,
+ id              INT,
+ name            STRING,
+ address         STRUCT<street:STRING, city:STRING, state:STRING>,
+ phones          ARRAY<STRING>,
  languages_level MAP<STRING, STRING>
 )
 ROW FORMAT DELIMITED
