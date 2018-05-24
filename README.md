@@ -61,7 +61,7 @@ Example: ARRAY< DOUBLE >
 Unlike traditional databases, which have total control of the data being loaded and enforce that the table definitions are followed at the write time (a.k.a. schema-on-write), Hive does not control the data stored. Users can store files in HDFS and then create the table that references it, regardless of the data format. This behavior, called schema-on-read, can cause null values when they are not in conformance with table defitions, for example, when a column is defined as numeric but a string is found.
 
 ## Data Definition Language (DDL)
-Similarly to RDBMS DDLs, Hive DDLs allow creating,  altering or dropping the structure of objects (e.g. databases, tables, columns, views, etc).
+Similarly to RDBMS DDLs, Hive allows creating,  altering or dropping the structure of objects (e.g. databases, tables, columns, views, etc).
 
 ### Databases
 
@@ -212,6 +212,46 @@ hive> dfs -ls -R /user/thiago/employees_external;
 
 
 ### Partitions
+
+```
+hive> CREATE TABLE hr.employees_partitioned (
+      id              INT,
+      name            STRING,
+      address         STRUCT<street:STRING, city:STRING, state:STRING>,
+      phones          ARRAY<STRING>,
+      languages_level MAP<STRING, STRING>
+     ) 
+     PARTITIONED BY (country STRING);
+     
+hive> dfs -ls -R /user/hive/warehouse/hr.db;
+drwxrwxr-x   - root supergroup          0 2018-05-24 19:48 /user/hive/warehouse/hr.db/employees_partitioned
+hive> show partitions hr.employees_partitioned;
+
+hive> LOAD DATA LOCAL INPATH '/staging/emp_part_usa.txt' 
+      INTO TABLE hr.employees_partitioned
+      PARTITION (country='USA');
+hive> show partitions hr.employees_partitioned;
+country=USA
+    
+hive> dfs -ls -R /user/hive/warehouse/hr.db/employees_partitioned;
+drwxrwxr-x   - root supergroup          0 2018-05-24 19:08 /user/hive/warehouse/hr.db/employees_partitioned/country=USA
+-rwxrwxr-x   1 root supergroup        469 2018-05-24 19:08 /user/hive/warehouse/hr.db/employees_partitioned/country=USA/emp_part_usa.txt     
+```
+
+
+```
+hive> ALTER TABLE hr.employees_partitioned ADD
+      PARTITION (country='BRA');
+hive> show partitions hr.employees_partitioned;
+country=BRA
+country=USA
+hive> dfs -ls -R /user/hive/warehouse/hr.db/employees_partitioned;
+drwxrwxr-x   - root supergroup          0 2018-05-24 19:17 /user/hive/warehouse/hr.db/employees_partitioned/country=BRA
+drwxrwxr-x   - root supergroup          0 2018-05-24 19:08 /user/hive/warehouse/hr.db/employees_partitioned/country=USA
+-rwxrwxr-x   1 root supergroup        469 2018-05-24 19:08 /user/hive/warehouse/hr.db/employees_partitioned/country=USA/emp_part_usa.txt
+hive> dfs -put emp_part_bra.txt /user/hive/warehouse/hr.db/employees_partitioned/country=BRA;
+```
+
 
 ### Buckets
 
