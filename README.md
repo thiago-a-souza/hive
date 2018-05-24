@@ -213,6 +213,15 @@ hive> dfs -ls -R /user/thiago/employees_external;
 
 ### Partitions
 
+In RDBMS world, partitions can segment tables based on a column for performance purposes. Hive follows that concept by creating subdirectories under the folder's table. That way each subdirectory stores files for the corresponding  partition. Hive uses a different syntax to declare partitions, the column being partitioned cannot be in the *CREATE TABLE* statement because it creates columns specified in the *PARTITION BY* clause.
+
+Once the partition is declared in the table structure, the actual partition values should be added to the table. The *LOAD* statement can add them if the partition names and values are provided. Alternatively, the *ALTER TABLE* statement can also add partition values.
+
+
+**a) Creating partitions with LOAD**
+
+Notice that creating a partitioned table only creates the table folder. After running the *LOAD* statement we can see that a partition and a subdirectory *country=USA* was created.
+
 ```
 hive> CREATE TABLE hr.employees_partitioned (
       id              INT,
@@ -238,6 +247,9 @@ drwxrwxr-x   - root supergroup          0 2018-05-24 19:08 /user/hive/warehouse/
 -rwxrwxr-x   1 root supergroup        469 2018-05-24 19:08 /user/hive/warehouse/hr.db/employees_partitioned/country=USA/emp_part_usa.txt     
 ```
 
+**b) Creating partitions with ALTER**
+
+Instead of using *LOAD*, we can *ALTER* the table to add the partition and then copy the data to the partition.
 
 ```
 hive> ALTER TABLE hr.employees_partitioned ADD
