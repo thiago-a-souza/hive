@@ -26,7 +26,7 @@ Figure 1: Apache Hive architecture <a href="https://github.com/thiago-a-souza/tm
 
 Hive organizes the data into four elements:
 
-- **Database:** represents a namespace to group and uniquely identify objects (e.g. tables, views, etc). Every database creates under the warehouse directory - specified in the configuration file *$HIVE_HOME/conf/hive-site.xml*, which default warehouse directory is */user/hive/warehouse* in HDFS.
+- **Database:** represents a namespace to group and uniquely identify objects (e.g. tables, views, etc). Every database creates a folder under the warehouse directory - specified in the configuration file *$HIVE_HOME/conf/hive-site.xml*, which default warehouse directory is */user/hive/warehouse* in HDFS.
 - **Table:** similar to database tables with columns, rows, etc. Every table creates a  subdirectory under the corresponding database directory.
 - **Partition:** tables can be split into partitions for faster scans. Every partition creates a subdirectory under the corresponding table directory in HDFS.
 - **Buckets:** tables can be further optimized with buckets based on the hash function of a given column.
