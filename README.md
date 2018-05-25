@@ -269,6 +269,8 @@ hive> dfs -put emp_part_bra.txt /user/hive/warehouse/hr.db/employees_partitioned
 
 Partitions are powerful when a small number of partitions hold a lot of data per partition. In contrast, bucketing allows segmenting  tables when a column has many different values but not as many rows per key. This method hashes values of  bucketed columns into user-defined buckets, enabling more efficient queries. In particular, joins between tables that are bucketed on the same column take advantage of this approach.
 
+Populating bucket tables correctly can be performed using an *INSERT* statement. The *LOAD* command does not populate bucket tables correctly because it doesn't verify the metadata, it simply copy/move files to corresponding table folders.
+
 
 ```
 hive> CREATE TABLE hr.employees_bucket (
