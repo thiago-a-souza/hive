@@ -307,7 +307,34 @@ hive> CREATE VIEW hr.employee_eng_level AS
       FROM employees_partitioned;
 ```
 
+## Data Manipulation Language (DML)
 
+### LOAD
+
+The *LOAD* statement simply moves files to the table folder. If the *LOCAL* keyword is provided, the file should be in the local filesystem. If omitted, the file should be in HDFS.
+
+**a) Loading from HDFS**
+
+Before running the *LOAD* command we can see the file in the source HDFS directory, and then it's moved to the table's folder. The optional *OVERWRITE* keyword overwrites all the data stored in the table's folder.
+
+```
+hive> dfs -ls -R /user/thiago;
+-rw-r--r--   1 root supergroup        469 2018-05-25 18:00 /user/thiago/emp.txt
+
+hive> LOAD DATA INPATH '/user/thiago/emp.txt' 
+      OVERWRITE INTO TABLE hr.employees;
+
+hive> dfs -ls -R /user/hive/warehouse/hr.db/employees;
+-rwxrwxr-x   1 root supergroup        469 2018-05-25 18:00 /user/hive/warehouse/hr.db/employees/emp.txt
+```
+
+**b) Loading from local filesystem**
+
+### INSERT
+
+### UPDATE
+
+### DELETE
     
 # References
 
