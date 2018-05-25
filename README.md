@@ -394,6 +394,8 @@ hive> dfs -ls -R /user/thiago/emp_names;
 
 ### UPDATE
 
+Hive updates are restricted to tables that support transactions, which is not enabled by default.
+
 **Syntax:**
 
 ```
@@ -404,12 +406,18 @@ SET column = value
 
 ### DELETE
 
+Hive deletes are restricted to tables that support transactions, which is not enabled by default.
+
 **Syntax:**
 
 ```
 DELETE table
 [WHERE exp];
 ```
+
+## Queries
+
+
     
 # References
 
