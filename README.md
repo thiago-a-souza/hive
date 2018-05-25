@@ -370,7 +370,7 @@ hive> INSERT INTO hr.name_freq
 
 **b) Insert values**
 
-Notice that inserting values require the keyword *TABLE*.
+Unlike SQL standards, inserting values require the keyword *TABLE*.
 
 ```
 hive> CREATE TABLE example
