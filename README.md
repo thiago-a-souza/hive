@@ -269,6 +269,30 @@ hive> dfs -put emp_part_bra.txt /user/hive/warehouse/hr.db/employees_partitioned
 
 Partitions are powerful when a small number of partitions hold a lot of data per partition. In contrast, bucketing allows segmenting  tables when a column has many different values but not as many rows per key. This method hashes values of  bucketed columns into user-defined buckets, enabling more efficient queries. In particular, joins between tables that are bucketed on the same column take advantage of this approach.
 
+
+```
+hive> CREATE TABLE hr.employees_bucket (
+      id              INT,
+      name            STRING,
+      address         STRUCT<street:STRING, city:STRING, state:STRING>,
+      phones          ARRAY<STRING>,
+      languages_level MAP<STRING, STRING>
+     ) 
+     CLUSTERED BY (id) INTO 3 BUCKETS;
+
+hive> set hive.enforce.bucketing = true;
+
+hive> insert into hr.employees_bucket
+      select 
+       id, name, address, phones, languages_level 
+      from hr.employees_partitioned;
+      
+hive> dfs -ls -R /user/hive/warehouse/hr.db/employees_bucket;
+-rwxrwxr-x   1 root supergroup         56 2018-05-25 15:33 /user/hive/warehouse/hr.db/employees_bucket/000000_0
+-rwxrwxr-x   1 root supergroup        184 2018-05-25 15:33 /user/hive/warehouse/hr.db/employees_bucket/000001_0
+-rwxrwxr-x   1 root supergroup        201 2018-05-25 15:33 /user/hive/warehouse/hr.db/employees_bucket/000002_0
+```
+
 ### Views
     
 # References
