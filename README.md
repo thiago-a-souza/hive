@@ -297,6 +297,17 @@ hive> dfs -ls -R /user/hive/warehouse/hr.db/employees_bucket;
 ```
 
 ### Views
+
+Similarly to relational database views, Hive makes it easier to hide complex queries into logical views. 
+
+```
+hive> CREATE VIEW hr.employee_eng_level AS
+      SELECT 
+       name, languages_level['english'] 
+      FROM employees_partitioned;
+```
+
+
     
 # References
 
