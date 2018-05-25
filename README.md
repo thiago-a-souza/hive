@@ -267,6 +267,8 @@ hive> dfs -put emp_part_bra.txt /user/hive/warehouse/hr.db/employees_partitioned
 
 ### Buckets
 
+Partitions are powerful when a small number of partitions hold a lot of data per partition. In contrast, bucketing allows segmenting  tables when a column has many different values but not as many rows per key. This method hashes values of  bucketed columns into user-defined buckets, enabling more efficient queries. In particular, joins between tables that are bucketed on the same column take advantage of this approach.
+
 ### Views
     
 # References
