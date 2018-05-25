@@ -350,15 +350,51 @@ hive> dfs -ls -R /user/hive/warehouse/hr.db/employees;
 
 ### INSERT
 
+Similarly to RDBMS inserts, it allows inserting individual rows or sourcing from existing tables. In addition to that, the data can be inserted into a specific HDFS directory.
+
+**a) Insert from existing table**
+
 ```
-INSERT [OVERWRITE]
-[DIRECTORY directory]
-SELECT fields 
-FROM table
-[WHERE exp];
+hive> CREATE TABLE hr.name_freq (
+       name  STRING,
+       freq  INT
+      );
+      
+hive> INSERT INTO hr.name_freq
+      SELECT 
+       name
+       ,count(*)
+      FROM employees
+      GROUP BY name;
+```
+
+**b) Insert values**
+
+Notice that inserting values require the keyword *TABLE*.
+
+```
+hive> CREATE TABLE example
+      (id int,
+       name string
+      );
+hive> INSERT INTO TABLE 
+      example
+      values (1, 'one'), (2, 'two'), (3, 'three');
+```    
+
+**c) Insert into directory**
+
+```
+hive> dfs -mkdir /user/thiago/emp_names;
+hive> INSERT OVERWRITE DIRECTORY '/user/thiago/emp_names'
+      select distinct name from employees;
+hive> dfs -ls -R /user/thiago/emp_names;
+-rwxr-xr-x   1 root supergroup         34 2018-05-25 19:19 /user/thiago/emp_names/000000_0
 ```
 
 ### UPDATE
+
+**Syntax:**
 
 ```
 UPDATE table
@@ -367,6 +403,8 @@ SET column = value
 ```
 
 ### DELETE
+
+**Syntax:**
 
 ```
 DELETE table
