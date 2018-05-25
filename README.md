@@ -313,10 +313,17 @@ hive> CREATE VIEW hr.employee_eng_level AS
 
 The *LOAD* statement simply copies/moves files to the table folder. If the *LOCAL* keyword is provided, the file should be in the local filesystem. If omitted, the file should be in HDFS. *LOAD* is particularly handy when populating partitioned tables since it creates the partition metadata and the corresponding folder.
 
+**Syntax:**
+
+```
+LOAD DATA [LOCAL] INPATH 'filepath' [OVERWRITE] INTO TABLE tablename
+```
+
+
 **a) Loading from HDFS**
 
 
-Loading from HDFS moves the data from the source HDFS directory to the table's folder. The optional *OVERWRITE* keyword overwrites all the data stored of the target table.
+Loading from HDFS moves the data from the source HDFS directory to the table's folder.
 
 ```
 hive> dfs -ls -R /user/thiago;
@@ -343,9 +350,28 @@ hive> dfs -ls -R /user/hive/warehouse/hr.db/employees;
 
 ### INSERT
 
+```
+INSERT [OVERWRITE]
+[DIRECTORY directory]
+SELECT fields 
+FROM table
+[WHERE exp];
+```
+
 ### UPDATE
 
+```
+UPDATE table
+SET column = value
+[WHERE exp];
+```
+
 ### DELETE
+
+```
+DELETE table
+[WHERE exp];
+```
     
 # References
 
