@@ -109,7 +109,7 @@ hive> USE hr;
 ### Tables
 
 
-Hive provides two types of tables: internal and external. Internal tables are fully managed by Hive, meaning that when the table is dropped, the corresponding data is also removed. External tables are created using the *EXTERNAL* keyword in the *CREATE TABLE* statement. Because dropping external tables don't delete associated files, they are suitable for production environments to prevent removing files by accident. External tables are also used when the dataset is stored outside HDFS filesystem like Amazon S3.
+Hive provides two types of tables: internal and external. Internal tables are fully managed by Hive, meaning that when a table is dropped, the corresponding data is also removed. External tables are created using the *EXTERNAL* keyword in the *CREATE TABLE* statement. Because dropping external tables don't delete associated files, they are suitable for production environments to prevent removing files by accident. External tables are also used when the dataset is stored outside HDFS filesystem like Amazon S3.
 
 By default, when a table is created, Hive creates a new folder under the current database, which is a subdirectory under */user/hive/warehouse*. However, the *LOCATION* keyword allows specifying an alternative path. This folder stores all files associated with the table. As a result, any file added, modified or removed from that directory change query outputs. In other words, data can be loaded by simply copying files (regardless of the file name) to the table directory, without having to run insert or load statements.
 
@@ -213,7 +213,7 @@ hive> dfs -ls -R /user/thiago/employees_external;
 
 ### Partitions
 
-In RDBMS world, partitions can segment tables based on a column for performance purposes. Hive follows that concept by creating subdirectories under the table's folder. That way each subdirectory stores files for the corresponding  partition. Hive uses a different syntax to declare partitions, the column being partitioned cannot be in the *CREATE TABLE* statement because it creates columns specified in the *PARTITION BY* clause.
+In RDBMS world, partitions can segment tables based on a column for performance purposes. Hive follows that concept by creating subdirectories under the table's folder. That way, each subdirectory stores files for the corresponding  partition. Hive uses a different syntax to declare partitions, the column being partitioned cannot be in the *CREATE TABLE* statement because it creates columns specified in the *PARTITION BY* clause.
 
 Once the partition is declared in the table structure, the actual partition values should be added to the table. The *LOAD* statement can add them if the partition names and values are provided. Alternatively, the *ALTER TABLE* statement can also add partition values.
 
@@ -267,9 +267,9 @@ hive> dfs -put emp_part_bra.txt /user/hive/warehouse/hr.db/employees_partitioned
 
 ### Buckets
 
-Partitions are powerful when a small number of partitions hold a lot of data per partition. In contrast, bucketing allows segmenting  tables when a column has many different values but not as many rows per key. This method hashes values of  bucketed columns into user-defined buckets, enabling more efficient queries. In particular, joins between tables that are bucketed on the same column take advantage of this approach.
+Partitions are powerful when a small number of partitions hold a lot of data per partition. In contrast, bucketing allows segmenting  tables when a column has many different values but not many rows per key. This method hashes values of  bucketed columns into user-defined buckets, enabling more efficient queries. In particular, joins between tables that are bucketed on the same column take advantage of this approach.
 
-Populating bucket tables correctly can be performed using an *INSERT* statement. The *LOAD* command does not populate bucket tables correctly because it doesn't verify the metadata, it simply copy/move files to corresponding table folders. In addition to that, populating bucket tables also requires either enabling the parameter *hive.enforce.bucketing* or setting the option  *mapred.reduce.tasks* to match the number of buckets.
+Populating bucket tables correctly can be performed using an *INSERT* statement. The *LOAD* command does not populate bucket tables correctly because it doesn't verify the metadata, it simply copies/moves files to the corresponding table folder. In addition to that, populating bucket tables also requires either enabling the parameter *hive.enforce.bucketing* or setting the option  *mapred.reduce.tasks* to match the number of buckets.
 
 The following example creates a bucket table, enables the parameter *hive.enforce.bucketing* and the populates the table. Notice that three files are created under the table's folder.
 
