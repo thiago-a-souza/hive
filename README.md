@@ -436,6 +436,9 @@ In general, Hive queries are similar to standard SQL. There are some limitations
 Unlike relational databases, Hive supports complex data types (a.k.a. arrays, structs and maps), and their values are displayed in a JSON format. It's also possible to access a specific value from arrays using a 0-based index, structs using a dot notation or maps using a key - references to values not found return *NULL* rather than an error.
 
 
+
+**a)**
+
 ```
 hive> SELECT name, address, phones, languages_level 
       FROM employees;
@@ -446,27 +449,47 @@ jacques    {"street":"1000 5th Ave","city":"New York","state":"NY"}             
 francesca  {"street":"125 I St","city":"Sacramento","state":"CA"}                      ["777-222-3333"]                 {"italian":"fluent","english":"basic"}
 ```
 
+**b)**
 
 ```
-hive> SELECT SUM(salary), dept_id 
+hive> SELECT 
+       SUM(salary), dept_id 
       FROM employees 
       GROUP BY dept_id 
       HAVING SUM(salary) > 100000 
       ORDER BY 2 DESC;
-180000.0	3
-120000.0	1
+180000.0   3
+120000.0   1
 ```
 
+**c)**
+
 ```
-hive> SELECT d.name, count(e.dept_id)
+hive> SELECT
+       e.name as emp_name,
+       d.name as dept_name
+      FROM departments d
+      JOIN employees e
+      ON d.id = e.dept_id;
+john    Sales
+peter   Sales
+hans    IT
+jacques Marketing
+```
+
+**d)**
+
+```
+hive> SELECT 
+       d.name, count(e.dept_id)
       FROM departments d
       LEFT OUTER JOIN employees e
       ON d.id = e.dept_id
       GROUP BY d.name;
-IT          1
-Legal       0
-Marketing   1
-Sales       2    
+IT         1
+Legal      0
+Marketing  1
+Sales      2    
 ```
 
     
