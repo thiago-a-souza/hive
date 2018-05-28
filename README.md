@@ -450,7 +450,22 @@ jacques    {"street":"1000 5th Ave","city":"New York","state":"NY"}             
 francesca  {"street":"125 I St","city":"Sacramento","state":"CA"}                      ["777-222-3333"]                 {"italian":"fluent","english":"basic"}
 ```
 
-**b) Query with group function**
+**b) Accessing collections**
+```
+hive> SELECT
+       name,
+       address.state,
+       phones[0],
+       languages_level['english']
+      from employees;
+john      CA 111-222-3333 fluent
+peter     CA 222-111-3333 fluent
+hans      NY 789-012-3456 advanced
+jacques   NY 888-111-4444 advanced
+francesca CA 777-222-3333 basic
+```
+
+**c) Query with group function**
 
 ```
 hive> SELECT 
@@ -463,7 +478,7 @@ hive> SELECT
 120000.0   1
 ```
 
-**c) Inner Join**
+**d) Inner Join**
 
 ```
 hive> SELECT
@@ -478,7 +493,7 @@ hans    IT
 jacques Marketing
 ```
 
-**d) Left Outer Join**
+**e) Left Outer Join**
 
 ```
 hive> SELECT 
