@@ -456,6 +456,18 @@ hive> SELECT SUM(salary), dept_id
 120000.0	1
 ```
 
+```
+hive> SELECT d.name, count(e.dept_id)
+      FROM departments d
+      LEFT OUTER JOIN employees e
+      ON d.id = e.dept_id
+      GROUP BY d.name;
+IT	        1
+Legal       0
+Marketing   1
+Sales       2    
+```
+
     
 # References
 
