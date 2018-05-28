@@ -437,7 +437,8 @@ Unlike relational databases, Hive supports complex data types (a.k.a. arrays, st
 
 
 ```
-hive> SELECT name, address, phones, languages_level FROM employees;
+hive> SELECT name, address, phones, languages_level 
+      FROM employees;
 john       {"street":"50 Hagiwara Tea Garden Dr","city":"San Francisco","state":"CA"}  ["111-222-3333","444-555-8888"]  {"english":"fluent","spanish":"basic"}
 peter      {"street":"700 Exposition Park Dr","city":"Los Angeles","state":"CA"}       ["222-111-3333","777-555-4444"]  {"english":"fluent","french":"advanced","spanish":"intermediate"}
 hans       {"street":"79th St","city":"New York","state":"NY"}                         ["789-012-3456","999-000-1111"]  {"german":"fluent","english":"advanced"}
@@ -462,7 +463,7 @@ hive> SELECT d.name, count(e.dept_id)
       LEFT OUTER JOIN employees e
       ON d.id = e.dept_id
       GROUP BY d.name;
-IT	        1
+IT          1
 Legal       0
 Marketing   1
 Sales       2    
