@@ -438,11 +438,23 @@ Unlike relational databases, Hive supports complex data types (a.k.a. arrays, st
 
 ```
 hive> SELECT name, address, phones, languages_level FROM employees;
-john       {"street":"50 Hagiwara Tea Garden Dr","city":"San Francisco","state":"CA"}  ["111-222-3333","444-555-8888"]	{"english":"fluent","spanish":"basic"}
-peter      {"street":"700 Exposition Park Dr","city":"Los Angeles","state":"CA"}       ["222-111-3333","777-555-4444"]	{"english":"fluent","french":"advanced","spanish":"intermediate"}
-hans       {"street":"79th St","city":"New York","state":"NY"}                         ["789-012-3456","999-000-1111"]	{"german":"fluent","english":"advanced"}
+john       {"street":"50 Hagiwara Tea Garden Dr","city":"San Francisco","state":"CA"}  ["111-222-3333","444-555-8888"]  {"english":"fluent","spanish":"basic"}
+peter      {"street":"700 Exposition Park Dr","city":"Los Angeles","state":"CA"}       ["222-111-3333","777-555-4444"]  {"english":"fluent","french":"advanced","spanish":"intermediate"}
+hans       {"street":"79th St","city":"New York","state":"NY"}                         ["789-012-3456","999-000-1111"]  {"german":"fluent","english":"advanced"}
+jacques    {"street":"1000 5th Ave","city":"New York","state":"NY"}                    ["888-111-4444"]                 {"french":"fluent","english":"advanced"}
+francesca  {"street":"125 I St","city":"Sacramento","state":"CA"}                      ["777-222-3333"]                 {"italian":"fluent","english":"basic"}
 ```
 
+
+```
+hive> SELECT SUM(salary), dept_id 
+      FROM employees 
+      GROUP BY dept_id 
+      HAVING SUM(salary) > 100000 
+      ORDER BY 2 DESC;
+180000.0	3
+120000.0	1
+```
 
     
 # References
