@@ -437,10 +437,11 @@ Unlike relational databases, Hive supports complex data types (a.k.a. arrays, st
 
 
 
-**a)**
+**a) Simple query**
 
 ```
-hive> SELECT name, address, phones, languages_level 
+hive> SELECT 
+       name, address, phones, languages_level 
       FROM employees;
 john       {"street":"50 Hagiwara Tea Garden Dr","city":"San Francisco","state":"CA"}  ["111-222-3333","444-555-8888"]  {"english":"fluent","spanish":"basic"}
 peter      {"street":"700 Exposition Park Dr","city":"Los Angeles","state":"CA"}       ["222-111-3333","777-555-4444"]  {"english":"fluent","french":"advanced","spanish":"intermediate"}
@@ -449,7 +450,7 @@ jacques    {"street":"1000 5th Ave","city":"New York","state":"NY"}             
 francesca  {"street":"125 I St","city":"Sacramento","state":"CA"}                      ["777-222-3333"]                 {"italian":"fluent","english":"basic"}
 ```
 
-**b)**
+**b) Query with group function**
 
 ```
 hive> SELECT 
@@ -462,7 +463,7 @@ hive> SELECT
 120000.0   1
 ```
 
-**c)**
+**c) Inner Join**
 
 ```
 hive> SELECT
@@ -477,7 +478,7 @@ hans    IT
 jacques Marketing
 ```
 
-**d)**
+**d) Left Outer Join**
 
 ```
 hive> SELECT 
