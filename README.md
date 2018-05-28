@@ -120,9 +120,11 @@ To support processing structured files, Hive adopts control characters (^A for c
 File *emp_std.txt* using standard delimiters:
 
 ```
-1^Ajohn^A50 Hagiwara Tea Garden Dr^BSan Francisco^BCA^A111-222-3333^B444-555-8888^Aenglish^Cfluent^Bspanish^Cbasic
-2^Apeter^A700 Exposition Park Dr^BLos Angeles^BCA^A222-111-3333^B777-555-4444^Aenglish^Cfluent^Bfrench^Cadvanced^Bspanish^Cintermediate
-3^Ahans^A79th St^BNew York^BNY^A789-012-3456^B999-000-1111^Agerman^Cfluent^Benglish^Cadvanced
+1^Ajohn^A50 Hagiwara Tea Garden Dr^BSan Francisco^BCA^A111-222-3333^B444-555-8888^Aenglish^Cfluent^Bspanish^Cbasic^A100000^A3
+2^Apeter^A700 Exposition Park Dr^BLos Angeles^BCA^A222-111-3333^B777-555-4444^Aenglish^Cfluent^Bfrench^Cadvanced^Bspanish^Cintermediate^A80000^A3
+3^Ahans^A79th St^BNew York^BNY^A789-012-3456^B999-000-1111^Agerman^Cfluent^Benglish^Cadvanced^A120000^A1
+4^Ajacques^A1000 5th Ave^BNew York^BNY^A888-111-4444^Afrench^Cfluent^Benglish^Cadvanced^A90000^A2
+5^Afrancesca^A125 I St^BSacramento^BCA^A777-222-3333^Aitalian^Cfluent^Benglish^Cbasic^A85000
 ```
 
 Creating an internal table using default settings, verifying the folder created and moving *emp_std.txt* to the table folder:
@@ -133,7 +135,9 @@ hive> CREATE TABLE hr.employees_std (
       name            STRING,
       address         STRUCT<street:STRING, city:STRING, state:STRING>,
       phones          ARRAY<STRING>,
-      languages_level MAP<STRING, STRING>
+      languages_level MAP<STRING, STRING>,
+      salary          DOUBLE,
+      dept_id         INT
       );
     
 hive> dfs -ls /user/hive/warehouse/hr.db;
@@ -158,9 +162,11 @@ hive>
 File *emp_cust.txt* using customized delimiters:
 
 ```
-1|john|50 Hagiwara Tea Garden Dr,San Francisco,CA|111-222-3333,444-555-8888|english:fluent,spanish:basic
-2|peter|700 Exposition Park Dr,Los Angeles,CA|222-111-3333,777-555-4444|english:fluent,french:advanced,spanish:intermediate
-3|hans|79th St,New York,NY|789-012-3456,999-000-1111|german:fluent,english:advanced
+1|john|50 Hagiwara Tea Garden Dr,San Francisco,CA|111-222-3333,444-555-8888|english:fluent,spanish:basic|100000|3
+2|peter|700 Exposition Park Dr,Los Angeles,CA|222-111-3333,777-555-4444|english:fluent,french:advanced,spanish:intermediate|80000|3
+3|hans|79th St,New York,NY|789-012-3456,999-000-1111|german:fluent,english:advanced|120000|1
+4|jacques|1000 5th Ave,New York,NY|888-111-4444|french:fluent,english:advanced|90000|2
+5|francesca|125 I St,Sacramento,CA|777-222-3333|italian:fluent,english:basic|85000
 ```
 
 Creating an alternative folder, copying the file to the new folder and creating a customized table:
@@ -174,7 +180,9 @@ hive> CREATE TABLE hr.employees_cust (
       name           STRING,
       address        STRUCT<street:STRING, city:STRING, state:STRING>,
       phones         ARRAY<STRING>,
-      languages_level MAP<STRING, STRING>
+      languages_level MAP<STRING, STRING>,
+      salary          DOUBLE,
+      dept_id         INT      
      )
      ROW FORMAT DELIMITED
      FIELDS TERMINATED BY '|'
@@ -197,7 +205,9 @@ hive> CREATE EXTERNAL TABLE hr.employees_ext (
       name            STRING,
       address         STRUCT<street:STRING, city:STRING, state:STRING>,
       phones          ARRAY<STRING>,
-      languages_level MAP<STRING, STRING>
+      languages_level MAP<STRING, STRING>,
+      salary          DOUBLE,
+      dept_id         INT      
      )
      LOCATION '/user/thiago/employees_external';
 ```
@@ -228,7 +238,9 @@ hive> CREATE TABLE hr.employees_partitioned (
       name            STRING,
       address         STRUCT<street:STRING, city:STRING, state:STRING>,
       phones          ARRAY<STRING>,
-      languages_level MAP<STRING, STRING>
+      languages_level MAP<STRING, STRING>,
+      salary          DOUBLE,
+      dept_id         INT      
      ) 
      PARTITIONED BY (country STRING);
      
@@ -279,7 +291,9 @@ hive> CREATE TABLE hr.employees_bucket (
       name            STRING,
       address         STRUCT<street:STRING, city:STRING, state:STRING>,
       phones          ARRAY<STRING>,
-      languages_level MAP<STRING, STRING>
+      languages_level MAP<STRING, STRING>,
+      salary          DOUBLE,
+      dept_id         INT      
      ) 
      CLUSTERED BY (id) INTO 3 BUCKETS;
 
@@ -419,7 +433,7 @@ DELETE table
 
 In general, Hive queries are similar to standard SQL. There are some limitations like supporting only equi-joins and not allowing *OR* operators in *ON* clauses. Despite these constraints, Hive supports most commonly used operators, functions and clauses available in standard SQL.
 
-Unlike relational databases, Hive supports complex data types (a.k.a. arrays, structs, maps), and their values are displayed in a JSON format. It's also possible to access a specific value from arrays using a 0-based index), structs using a dot notation or maps using a key - references to values not found return *NULL* rather than an error.
+Unlike relational databases, Hive supports complex data types (a.k.a. arrays, structs and maps), and their values are displayed in a JSON format. It's also possible to access a specific value from arrays using a 0-based index, structs using a dot notation or maps using a key - references to values not found return *NULL* rather than an error.
 
 
 ```
@@ -428,6 +442,8 @@ john       {"street":"50 Hagiwara Tea Garden Dr","city":"San Francisco","state":
 peter      {"street":"700 Exposition Park Dr","city":"Los Angeles","state":"CA"}       ["222-111-3333","777-555-4444"]	{"english":"fluent","french":"advanced","spanish":"intermediate"}
 hans       {"street":"79th St","city":"New York","state":"NY"}                         ["789-012-3456","999-000-1111"]	{"german":"fluent","english":"advanced"}
 ```
+
+
     
 # References
 
