@@ -433,7 +433,7 @@ DELETE table
 
 In general, Hive queries are similar to standard SQL. There are some limitations like supporting only equi-joins and not allowing *OR* operators in *ON* clauses. Despite these constraints, Hive supports most commonly used operators, functions and clauses available in standard SQL.
 
-Unlike relational databases, Hive supports complex data types (a.k.a. arrays, structs and maps), and their values are displayed in a JSON format. It's also possible to access a specific value from arrays using a 0-based index, structs using a dot notation or maps using a key - references to values not found return *NULL* rather than an error. In addition to the *LIKE* operator, Hive supports regular expressions with *RLIKE*.
+Unlike relational databases, Hive supports complex data types (a.k.a. arrays, structs and maps), and their values are displayed in a JSON format. It's also possible to access a specific value from arrays using a 0-based index, structs using a dot notation or maps using a key - references to values not found return *NULL* rather than an error. In addition to *LIKE*, Hive supports regular expressions with *RLIKE*.
 
 
 
