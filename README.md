@@ -60,8 +60,26 @@ Example: ARRAY< DOUBLE >
 
 Unlike traditional databases, which have total control of the data being loaded and enforce that the table definitions are followed at the write time (a.k.a. schema-on-write), Hive does not control the data stored. Users can store files in HDFS and then create the table that references it, regardless of the data format. This behavior, called schema-on-read, can cause null values when they are not in conformance with table definitions, for example, when a column is defined as numeric but a string is found.
 
+## File Formats
+
+Hive supports a wide range of file formats such as *TEXTFILE*, *SEQUENCEFILE*, *ORC*, *PARQUET*, *AVRO*, etc. Choosing an appropriate file format can be challenging and involves several aspects: read/write performance, ability to split files and  compression support. As a result, the tradeoff between performance and storage should guide the final decision on a particular dataset.
+
+In general, file formats can be divided into two categories: row level and column level. Row level formats store all the data of an individual row in a contiguous disk region. This behaviour enforces processing all columns without avoiding unnecessary data. On the other hand, storing data in a columnar format is more efficient in terms of size and performance. This format allows choosing a suitable encoding/compression according to the column type, reducing the file size. In addition to that, it can skip not requested columns, which results in a better performance.
+
+The optional clause *STORED AS* specifies the file format when the table is created. By default, tables are stored as *TEXTFILE*, but it can be modified in the *hive-site.xml* by setting the property *hive.default.fileformat*. Once created, the  format can be modified using the *ALTER TABLE* statement, but it doesn't change the data.
+
+- **TEXTFILE:** this row level storage format is the default option in Hive. Data can be compressed but it's not recommended because it does not allow splitting files, impacting parallel processing. Also, this format requires reading the entire row regardless of the columns requested. These factors make this format very slow for reading/writing data, as result it's not recommended for large datasets.
+
+- **SEQUENCEFILE:** row level format designed to store binary key/value pairs for Hadoop's MapReduce. By allowing compressed files on block or record level, it enables splitting files for parallel processing. Although it's better than *TEXTFILE*, this is not a good alternative for Hive because row level formats impact performance.
+
+- **ORC:** column level format designed as an improvement from RCFile to speed up Hive. It's a splittable format that uses encoders according to data types to enhance the compression ratio. For a better performance, it stores metadata like min, max, sum, count and built-in indexes. In addition to that, ORC supports ACID transactions, although was not built to meet OLTP requirements.
+
+- **PARQUET:** column level format based on Google's Dremel paper. Parquet chooses encodings based on the column type and the  data can be compressed using a specified algorithm (e.g. Snappy, Zlib, LZO) - data is not compressed by default.
+
+- **AVRO:** 
+
 ## Data Definition Language (DDL)
-Similarly to RDBMS DDLs, Hive allows creating,  altering or dropping the structure of objects (e.g. databases, tables, columns, views, etc).
+Similarly to RDBMS DDLs, Hive allows creating,  altering or dropping the structure of objects (e.g. databases, tables, columns, views, etc). 
 
 ### Databases
 
