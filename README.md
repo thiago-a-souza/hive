@@ -62,7 +62,7 @@ Unlike traditional databases, which have total control of the data being loaded 
 
 ## File Formats
 
-Hive supports a wide range of file formats such as *TEXTFILE*, *SEQUENCEFILE*, *ORC*, *PARQUET*, *AVRO*, etc. Choosing an appropriate file format can be challenging and involves several aspects: read/write performance, ability to split files and  compression support. As a result, the tradeoff between performance and storage should guide the final decision for a particular dataset.
+Hive supports a wide range of file formats such as *TEXTFILE*, *SEQUENCEFILE*, *ORC*, *PARQUET* and *AVRO*. Choosing an appropriate file format can be challenging and involves several aspects: read/write performance, ability to split files,  compression support and garbage collection . As a result, the tradeoff between performance and storage usually drives the final decision for a particular dataset.
 
 In general, file formats can be divided into two categories: row level and column level. Row level formats store all the data of an individual row in a contiguous disk region. This behaviour enforces processing all columns without avoiding unnecessary data. On the other hand, storing data in a columnar format is more efficient in terms of size and performance. This format allows choosing a suitable encoding according to the column type, reducing the file size. In addition to that, it can skip not requested columns, which results in a better performance.
 
@@ -74,9 +74,10 @@ The optional *STORED AS* clause specifies the file format when the table is crea
 
 - **ORC:** column level format designed as an improvement from RCFile to speed up Hive. It's a splittable format that uses encoders according to data types to enhance the compression ratio. For a better performance, it stores metadata like min, max, sum, count and built-in indexes. In addition to that, ORC supports ACID transactions, although it was not built to meet OLTP requirements.
 
-- **PARQUET:** column level format based on Google's Dremel paper. Parquet chooses encodings based on the column type and the  data can be compressed using a specified algorithm (e.g. Snappy, Zlib, LZO) - data is not compressed by default.
+- **PARQUET:** column level format created by Twitter and Cloudera based on Google's Dremel paper. Parquet chooses encodings based on the column type and the  data can be compressed using a specified algorithm (e.g. Snappy, Zlib, LZO) - data is not compressed by default. PARQUET also stores file schema and metadata for performance purposes.
 
-- **AVRO:** 
+- **AVRO:** this is a data serialization system that makes it easier to exchange large datasets between programs. It creates schemas using a JSON format while the data is serialized in a binary format. Additionally, Avro is a row level format that supports RPC calls.
+
 
 ## Data Definition Language (DDL)
 Similarly to RDBMS DDLs, Hive allows creating,  altering or dropping the structure of objects (e.g. databases, tables, columns, views, etc). 
