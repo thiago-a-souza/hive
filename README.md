@@ -18,8 +18,8 @@ Hive's architecture, illustrated in Figure 1, comprises four major components:
 
 
 <p align="center">
-<img src="https://github.com/thiago-a-souza/tmp/blob/master/img/hive_arch.png"  height="35%" width="35%"> <br>
-Figure 1: Apache Hive architecture <a href="https://github.com/thiago-a-souza/tmp/blob/master/README.md#references">(1)</a> </p> 
+<img src="https://github.com/thiago-a-souza/hive/blob/master/img/hive_arch.png"  height="35%" width="35%"> <br>
+Figure 1: Apache Hive architecture <a href="https://github.com/thiago-a-souza/hive/blob/master/README.md#references">(1)</a> </p> 
 </p>
 
 ## Data model
